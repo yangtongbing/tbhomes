@@ -16,5 +16,4 @@ Route::get('wechatCallback', 'HomeController@wechatCallback');
 Route::get('user/{id}', 'UserController@show');
 Route::post('user/{id}', 'UserController@show');
 
-
 //咳咳。成功没
