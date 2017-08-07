@@ -8,8 +8,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Request;
+
 class UserController extends Controller{
-    public function show(){
+    public function show()
+    {
         exit("123");
+    }
+
+    public function shows(Request $request)
+    {
+        echo "<pre>";
+        var_dump($request->input());
     }
 }

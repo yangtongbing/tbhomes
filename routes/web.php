@@ -14,3 +14,4 @@
 Route::get('login', 'HomeController@login');
 Route::get('wechatCallback', 'HomeController@wechatCallback');
 Route::get('user/{id}', 'UserController@show');
+Route::post('user/{id}', 'UserController@show');
