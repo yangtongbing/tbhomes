@@ -11,11 +11,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Request;
 
 class UserController extends Controller{
+
     public function show()
     {
         exit("123");
     }
 
+    /**
+     * @param Request $request 测试备注
+     */
     public function shows(Request $request)
     {
         echo "<pre>";
