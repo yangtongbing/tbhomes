@@ -18,11 +18,3 @@ Route::post('user/{id}', 'UserController@show');
 
 
 //testing successful？？
-
-//到底能不能成功了！！！
-
-//咳咳
-
-//成功吧
-
-//拜托，成功一次吧
