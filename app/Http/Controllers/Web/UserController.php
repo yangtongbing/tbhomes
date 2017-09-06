@@ -6,8 +6,9 @@
  * Time: 18:21
  */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
 
 class UserController extends Controller{

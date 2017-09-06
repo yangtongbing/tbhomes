@@ -10,21 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('login', 'HomeController@login');
-Route::get('wechatCallback', 'HomeController@wechatCallback');
-Route::get('user/{id}', 'UserController@show');
-Route::post('user/{id}', 'UserController@show');
-
-
-//testing successful？？
-
-//看来是不能成功了
-
-//哎，咋就不成功呢？
-
-//咳咳，我要生气了
-
-//keke
-
-//最后测试一次
+/*web页面*/
+Route::Group([ 'namespace' => 'Web'], function () {
+    Route::get("/", ['as' => 'web.index.index', 'uses' => 'UserController@show']);
+});
