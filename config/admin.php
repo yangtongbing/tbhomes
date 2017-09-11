@@ -5,12 +5,12 @@ return [
     /*
      * Laravel-admin name.
      */
-    'name'      => 'Laravel-admin',
+    'name'      => '合作机构后台管理',
 
     /*
      * Logo in admin panel header.
      */
-    'logo'      => '<b>Laravel</b> admin',
+    'logo'      => '<b>合作机构后台管理</b>',
 
     /*
      * Mini-logo in admin panel header.
@@ -53,7 +53,7 @@ return [
             'file'   => 'file',
         ],
 
-        'host' => 'http://localhost:8000/upload/',
+        'host' => 'http://zhanxi.com/upload/',
     ],
 
     /*
@@ -120,4 +120,16 @@ return [
      * Version displayed in footer.
      */
     'version'   => '1.0',
+
+    'upload'  => [
+
+        'disk' => 'admin',
+
+        'directory'  => [
+            'image'  => 'image',
+            'file'   => 'file',
+        ],
+
+        'host' => 'http://zhanxi.com/upload/',
+    ],
 ];
