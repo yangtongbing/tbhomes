@@ -23,7 +23,6 @@ use App\Repositories\ZoneRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class IndexController extends Controller
 {

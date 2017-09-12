@@ -41,5 +41,4 @@ return [
         'invert'    => true,
         'contrast'  => -5,
     ]
-
 ];
