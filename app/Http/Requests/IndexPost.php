@@ -26,8 +26,7 @@ class IndexPost extends FormRequest
         return [
             'account' => 'required',
             'password'  => 'required',
-            'code'  => 'required',
-            'sid'  => 'required',
+            'captcha'  => 'required',
         ];
     }
 
@@ -36,8 +35,7 @@ class IndexPost extends FormRequest
         return [
             'account.required' => '账号不能为空',
             'password.required'  => '密码不能为空',
-            'code.required'  => '验证码不能为空',
-            'sid.required'  => '其他错误',
+            'captcha.required'  => '验证码不正确',
         ];
     }
 }

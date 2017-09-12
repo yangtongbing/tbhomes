@@ -41,7 +41,6 @@
 
     <form class="form-signin" action="/web/doLogin" method="post">
         {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
-        <input type="hidden" name="sid" value=""/>
         <div class="row">
             <div class="col-md-12">
                 <input type="text" name="account" class="form-control" placeholder="账号" required autofocus>
@@ -56,7 +55,7 @@
         <div class="clear" style="margin: 3px"></div>
         <div class="row" style="margin-bottom: 10px">
             <div class="col-xs-7">
-                <input class="form-control" name="code" type="text" id="verify" maxlength="4" placeholder="验证码" required>
+                <input class="form-control" name="captcha" type="text" id="verify" maxlength="5" placeholder="验证码" required>
             </div>
             <div class="col-xs-5">
                 <img border="0" width="80%" height="34px" style="cursor:pointer"  onclick="getimgcode()" id="verifyImg">
@@ -90,7 +89,6 @@
         var token = $("input[name='_token']").val();
         $.post('imgCode', {_token:token}, function(data){
             $('#verifyImg').attr('src', data.details.code);
-            $("input[name='sid']").val(data.details.sid);
         });
     }
 

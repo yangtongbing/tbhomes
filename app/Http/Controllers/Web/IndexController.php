@@ -23,6 +23,7 @@ use App\Repositories\ZoneRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class IndexController extends Controller
 {
@@ -52,11 +53,7 @@ class IndexController extends Controller
     public function doLogin(IndexPost $request)
     {
         $input = $request->input();
-        //校验验证码
-        $BsSdk = resolve('BsSDK');
-        $info = $BsSdk->verifyImageCode(9, $input['code'], $input['sid']);
-        $info = json_decode($info, true);
-        if ($info['code'] != 0) {
+        if (captcha_check($input['captcha']) === false) {
             return back()->withErrors('验证码错误');
         }
 
@@ -116,23 +113,9 @@ class IndexController extends Controller
         //简单防刷
         $pathInfo = pathinfo(env('APP_URL'));
         if ($_SERVER['HTTP_HOST'] != $pathInfo['basename']) {
-            return $this->jsonError(9999, '禁止调用');
+            return $this->jsonError(9999, '禁止使用图形验证码');
         }
-
-        //调用基础服务图形验证码
-        $BsSdk = resolve('BsSDK');
-        $sessionId = session_id();
-        if (empty($sessionId) == true) {
-            $sessionId = time().rand(1000, 9999);
-        }
-        $info = $BsSdk->renderImageCode(9, 0, 0, 4, 900, ["fontSize"=>60], $sessionId);
-        $info = json_decode($info, true);
-
-        if ($info['code'] == 0) {
-            return $this->jsonSuccess(array('code'=>$info['message'],'sid'=>$sessionId));
-        } else {
-            return $this->jsonError(9999, '验证码获取失败');
-        }
+        return $this->jsonSuccess(array('code'=>captcha_src()));
     }
 
     public function mycustomer(Request $request,ZoneRepository $zoneRepository)
