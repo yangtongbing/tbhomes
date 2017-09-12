@@ -27,7 +27,7 @@
 <body class="hold-transition">
 <div class="login-box container">
     <div class="login-logo">
-        <b>机构合作系统</b>
+        <b>随手一写</b>
     </div>
     @if (count($errors) > 0)
         <div class="alert alert-danger">

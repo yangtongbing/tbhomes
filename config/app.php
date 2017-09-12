@@ -182,7 +182,8 @@ return [
         App\Providers\CipherECBServiceProvider::class,
         App\Providers\BsSdkServiceProvider::class,
         App\Providers\CallOutServiceProvider::class,
-        \SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
+        \SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class
     ],
 
     /*
@@ -231,7 +232,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'QrCode' => \SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => \SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ],
 
 ];
