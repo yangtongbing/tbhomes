@@ -20,4 +20,7 @@ class AtlasAdmin extends Model
      * @var array
      */
     protected $hidden = [];
+
+    //不用将要操作的字段全部写出来，
+    protected $guarded = [];
 }

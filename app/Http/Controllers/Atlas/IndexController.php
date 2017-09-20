@@ -14,7 +14,6 @@ use App\Http\Requests\IndexPost;
 use App\Repositories\AtlasAdminRepository;
 use App\Repositories\AtlasReleationRepository;
 use App\Repositories\AtlasUserRepository;
-use App\Repositories\TreeMapRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -53,6 +52,7 @@ class IndexController extends Controller
         if (captcha_check($input['captcha']) === false) {
             return back()->withErrors('验证码错误');
         }
+
         //判断密码
         $user = $this->repository->getOne('*', ['username' => $input['account']]);
         if ($user === false) {
@@ -142,7 +142,6 @@ class IndexController extends Controller
                     } else {
                         return array('error' => '上传失败');
                     }
-
                 } else {
                     return array('error' => '上传失败');
                 }
@@ -220,7 +219,6 @@ class IndexController extends Controller
     //账户信息
     public function account()
     {
-
         return view('atlas.account', ['title' => '账户信息', 'user' => $this->user]);
     }
 
