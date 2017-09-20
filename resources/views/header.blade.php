@@ -52,7 +52,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b></b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>信贷经理管理平台</b></span>
+            <span class="logo-lg"><b>随手一写</b></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -74,15 +74,15 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{asset('img/user2-160x160.jpg')}}" class="user-image" alt="User Image">
-                            <span class="hidden-xs">{{$user['leader_name']}}</span>
+                            <span class="hidden-xs">{{$user['name']}}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
                                 <img src="{{asset('img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
                                 <p>
-                                    {{$user['leader_name']}}
-                                    <small>{{$user['c_time']}}</small>
+                                    {{$user['name']}}
+                                    <small>{{$user['created_at']}}</small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -111,7 +111,7 @@
                     <img src="{{asset('img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>{{$user['leader_name']}}</p>
+                    <p>{{$user['name']}}</p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>

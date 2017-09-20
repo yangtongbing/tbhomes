@@ -39,7 +39,7 @@
         </div>
     @endif
 
-    <form class="form-signin" action="/web/doLogin" method="post">
+    <form class="form-signin" action="/atlas/doLogin" method="post">
         {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
         <div class="row">
             <div class="col-md-12">
@@ -87,7 +87,7 @@
     function getimgcode()
     {
         var token = $("input[name='_token']").val();
-        $.post('/web/imgCode', {_token:token}, function(data){
+        $.post('/atlas/imgCode', {_token:token}, function(data){
             $('#verifyImg').attr('src', data.details.code);
         });
     }

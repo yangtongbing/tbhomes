@@ -16,6 +16,7 @@ Route::group([
     $router->resource('order', OrderController::class);
     $router->resource('record', RecordController::class);
     $router->resource('account', AccountController::class);
+    $router->resource('atlas', AtlasController::class);
     $router->post('record/getDetail', 'RecordController@getDetail');
 
 

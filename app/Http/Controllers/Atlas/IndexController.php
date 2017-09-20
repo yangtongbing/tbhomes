@@ -6,13 +6,17 @@
  * Time: 14:17
  */
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers\Atlas;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateUserPost;
 use App\Http\Requests\IndexPost;
-use App\Repositories\CompanyRepository;
-use App\Repositories\OrderExtRepository;
+use App\Repositories\AtlasAdminRepository;
+use App\Repositories\AtlasReleationRepository;
+use App\Repositories\AtlasUserRepository;
+use App\Repositories\TreeMapRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,24 +24,26 @@ class IndexController extends Controller
 {
     protected $user;
 
-    private $session_key = 'webSign';
+    private $session_key = 'atlas';
+
+    private $tree_map = [];
 
     private $path = './upload/';
 
-    public function __construct(CompanyRepository $companyRepository)
+    public function __construct()
     {
         $this->middleware(function ($request, $next) {
             $this->user = json_decode(session($this->session_key), true);
             return $next($request);
         });
-        $this->repository = $companyRepository;
+        $this->repository = new AtlasAdminRepository();
     }
 
     //登录页面
     public function login()
     {
         Session::put($this->session_key, '');
-        return view('index.login', ['title'=>'登录']);
+        return view('atlas.login', ['title' => '登录']);
     }
 
     //处理登录
@@ -47,6 +53,24 @@ class IndexController extends Controller
         if (captcha_check($input['captcha']) === false) {
             return back()->withErrors('验证码错误');
         }
+        //判断密码
+        $user = $this->repository->getOne('*', ['username' => $input['account']]);
+        if ($user === false) {
+            return back()->withErrors('请确认账号是否存在？');
+        } else {
+            if ($user['password'] != md5(md5($input['password']) . 'atlas')) {
+                return back()->withErrors('密码错误');
+            }
+        }
+
+        //登录成功
+        if ($user) {
+            unset($user['password']);
+            Session::put($this->session_key, json_encode($user));
+        } else {
+            return back()->withErrors('请确认账号是否存在？');
+        }
+        return redirect('/atlas/account');
     }
 
     //图形验证码
@@ -57,7 +81,7 @@ class IndexController extends Controller
         if ($_SERVER['HTTP_HOST'] != $pathInfo['basename']) {
             return $this->jsonError(9999, '禁止使用图形验证码');
         }
-        return $this->jsonSuccess(array('code'=>captcha_src()));
+        return $this->jsonSuccess(array('code' => captcha_src()));
     }
 
     /**
@@ -105,11 +129,11 @@ class IndexController extends Controller
                 if ($bool) {
                     //更新数据库
                     if (empty($orderExists)) {
-                        $res = $orderExt->create(['oid'=>$orderId,'c_time'=>time(),'img_path'=>json_encode([$filename])]);
+                        $res = $orderExt->create(['oid' => $orderId, 'c_time' => time(), 'img_path' => json_encode([$filename])]);
                     } else {
                         $imgPath = json_decode($orderExists['img_path'], true);
                         $imgPath[] = $filename;
-                        $res = $orderExt->update(['oid'=>$orderId], ['img_path' => json_encode($imgPath)]);
+                        $res = $orderExt->update(['oid' => $orderId], ['img_path' => json_encode($imgPath)]);
                     }
                     //获取预览图
                     $return = $this->getPreview($orderId, true);
@@ -145,16 +169,16 @@ class IndexController extends Controller
         $initialPreview = [];
         $initialPreviewConfig = [];
         foreach ($imgPath as $value) {
-            $file = $this->path  . $value;
-            $handle = fopen($file,"r");
+            $file = $this->path . $value;
+            $handle = fopen($file, "r");
             //获取文件的统计信息
             $fstat = fstat($handle);
-            $initialPreview[] = "<img width='100%' src='".ltrim($file, '.')."'/>";
+            $initialPreview[] = "<img width='100%' src='" . ltrim($file, '.') . "'/>";
             $initialPreviewConfig[] = (object)[
-                    'caption' => basename($file),
-                    'size' => $fstat['size'],
-                    'url' => '/web/deleteImg',
-                    'key' => $oid . '&&' . $value
+                'caption' => basename($file),
+                'size' => $fstat['size'],
+                'url' => '/atlas/deleteImg',
+                'key' => $oid . '&&' . $value
             ];
         }
 
@@ -172,7 +196,6 @@ class IndexController extends Controller
     //删除图片
     public function deleteImg(Request $request)
     {
-
         $post = $request->input();
         $post = explode('&&', $post['key']);
 
@@ -180,7 +203,7 @@ class IndexController extends Controller
         $orderExt = new OrderExtRepository();
         $data = $orderExt->getOne('*', ['oid' => $post[0]]);
         if (empty($data) || empty($data['img_path'])) {
-            return array('error'=>'请确认该订单下是否存在图片？');
+            return array('error' => '请确认该订单下是否存在图片？');
         }
 
         $imgPath = json_decode($data['img_path'], true);
@@ -192,5 +215,51 @@ class IndexController extends Controller
             unlink($this->path . $post[1]);
             return array('success' => '删除成功');
         }
+    }
+
+    //账户信息
+    public function account()
+    {
+
+        return view('atlas.account', ['title' => '账户信息', 'user' => $this->user]);
+    }
+
+    /**
+     * 查询关联用户
+     * @param Request $request
+     * @return array
+     */
+    public function treemap(Request $request)
+    {
+        $data = DB::select('SELECT * FROM atlas_releation WHERE FIND_IN_SET(id, treemap(?));', (array)$request->input('id'));
+        if (!empty($data)) {
+            $data = json_decode(json_encode($data), true);
+            return $this->jsonSuccess($data);
+        } else {
+            return $this->jsonError(1000, '没有');
+        }
+    }
+
+    /**
+     * 添加用户
+     */
+    public function addUser(CreateUserPost $request)
+    {
+        $atlasUser = new AtlasUserRepository();
+        $atlasReleation = new AtlasReleationRepository();
+
+        //添加到用户表中
+        $post = $request->input();
+        $pid = $post['pid'];
+        unset($post['pid']);
+        $post['admin_id'] = $this->user['id'];
+        $id = $atlasUser->create($post);
+
+        //添加到关联表中
+        $atlasReleationData = [
+            'id' => $id,
+            'pid' => $pid
+        ];
+        $atlasReleation->create($atlasReleationData);
     }
 }

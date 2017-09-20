@@ -26,6 +26,23 @@ Route::Group(['middleware' => 'verify', 'namespace' => 'Web'], function () {
 Route::Group(['prefix' => 'web', 'namespace' => 'Web'], function () {
     //首页
     Route::get('login', 'IndexController@login')->name('web.Index.login');
-    Route::post('doLogin', 'IndexController@doLogin')->name('web.Index.doLogin');
     Route::post('imgCode', 'IndexController@imgCode')->name('web.Index.imgCode');
+});
+
+
+###url配置(需要登录)
+Route::Group(['prefix' => 'atlas', 'middleware' => 'atlasverify', 'namespace' => 'Atlas'], function () {
+    Route::get("/", 'IndexController@login');
+    Route::get("account", 'IndexController@account');
+    Route::post('imgCode', 'IndexController@imgCode')->name('atlas.Index.imgCode');
+    Route::post('treemap', 'IndexController@treemap')->name('atlas.Index.treemap');
+    Route::post('addUser', 'IndexController@addUser')->name('atlas.Index.addUser');
+});
+
+###url配置(不需要登录)
+Route::Group(['prefix' => 'atlas', 'namespace' => 'Atlas'], function () {
+    //首页
+    Route::get('login', 'IndexController@login')->name('atlas.Index.login');
+    Route::post('imgCode', 'IndexController@imgCode')->name('atlas.Index.imgCode');
+    Route::post('doLogin', 'IndexController@doLogin')->name('atlas.Index.doLogin');
 });
