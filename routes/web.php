@@ -37,6 +37,8 @@ Route::Group(['prefix' => 'atlas', 'middleware' => 'atlasverify', 'namespace' =>
     Route::post('imgCode', 'IndexController@imgCode')->name('atlas.Index.imgCode');
     Route::post('treemap', 'IndexController@treemap')->name('atlas.Index.treemap');
     Route::post('addUser', 'IndexController@addUser')->name('atlas.Index.addUser');
+    Route::get('myTreeMap', 'IndexController@myTreeMap')->name('atlas.Index.myTreeMap');
+    Route::get('treeMapList', 'IndexController@treeMapList')->name('atlas.Index.treeMapList');
 });
 
 ###url配置(不需要登录)

@@ -11,9 +11,11 @@ namespace App\Http\Controllers\Atlas;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserPost;
 use App\Http\Requests\IndexPost;
+use App\Models\AtlasUser;
 use App\Repositories\AtlasAdminRepository;
 use App\Repositories\AtlasReleationRepository;
 use App\Repositories\AtlasUserRepository;
+use App\Repositories\TreeMapRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -24,8 +26,6 @@ class IndexController extends Controller
     protected $user;
 
     private $session_key = 'atlas';
-
-    private $tree_map = [];
 
     private $path = './upload/';
 
@@ -55,6 +55,7 @@ class IndexController extends Controller
 
         //判断密码
         $user = $this->repository->getOne('*', ['username' => $input['account']]);
+
         if ($user === false) {
             return back()->withErrors('请确认账号是否存在？');
         } else {
@@ -219,7 +220,31 @@ class IndexController extends Controller
     //账户信息
     public function account()
     {
-        return view('atlas.account', ['title' => '账户信息', 'user' => $this->user]);
+        return view('atlas.account', ['title' => '我的信息', 'user' => $this->user]);
+    }
+
+    //我的家谱
+    public function myTreeMap(Request $request)
+    {
+        $id = $request->input('id');
+        return view('atlas.myTreeMap', ['title' => '我的家谱', 'user' => $this->user,  'id' => $id]);
+    }
+
+    public function treeMapList(Request $request)
+    {
+        $search = [];
+        $search['name'] = $request->input('name');
+        $query = AtlasUser::query();
+
+        if (isset($search['name'])) {
+            $query->where('name', '=', $search['name']);
+        }
+
+        //添加规则，只查自己的并且创建时间大于账号创建时间
+        $query->where('admin_id', '=', $this->user['id']);
+
+        $lists = $query->orderBy('created_at','desc')->paginate(20);
+        return view('atlas.treeMapList', ['user'=>$this->user, 'title' => '家谱成员','lists'=>$lists,'filter'=>$search]);
     }
 
     /**
@@ -229,10 +254,20 @@ class IndexController extends Controller
      */
     public function treemap(Request $request)
     {
-        $data = DB::select('SELECT * FROM atlas_releation WHERE FIND_IN_SET(id, treemap(?));', (array)$request->input('id'));
+        $data = DB::select('SELECT id,pid FROM atlas_releation WHERE FIND_IN_SET(id, treemap(?));', (array)$request->input('id'));
+
+        $treemapRepository = new TreeMapRepository();
+        $atlasUser = new AtlasUserRepository();
+        $atlasUserData = $atlasUser->getOne(['name'],['id' => $request->input('id')]);
+        //组装对应的结构，用于zui显示成树形结构
+        $returnData['data']['text'] = $atlasUserData['name'];
+
         if (!empty($data)) {
             $data = json_decode(json_encode($data), true);
-            return $this->jsonSuccess($data);
+            $treemapRepository->load($data);
+            $data = $treemapRepository->DeepTree($request->input('id'));
+            $returnData['data']['children'] = $data;
+            return $this->jsonSuccess($returnData);
         } else {
             return $this->jsonError(1000, '没有');
         }
@@ -240,7 +275,7 @@ class IndexController extends Controller
 
     /**
      * 添加用户
-     */
+     e*/
     public function addUser(CreateUserPost $request)
     {
         $atlasUser = new AtlasUserRepository();
@@ -259,5 +294,12 @@ class IndexController extends Controller
             'pid' => $pid
         ];
         $atlasReleation->create($atlasReleationData);
+    }
+
+    public function delUser(Request $request)
+    {
+        $id = $request->input('id');
+        $atlasUser = new AtlasUserRepository();
+        return $atlasUser->delete($id);
     }
 }

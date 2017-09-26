@@ -41,6 +41,8 @@ class TreeMapRepository
     public function DeepTree($root=0)
     {
         $atlasUser = new AtlasUserRepository();
+        $atlasUserData = $atlasUser->getList([], '*');
+        $atlasUserData = array_column($atlasUserData['list'], 'name', 'id');
         if (!$this->OriginalList) {
             return FALSE;
         }
@@ -53,6 +55,7 @@ class TreeMapRepository
                 unset($originalList[$k]);
                 continue;
             }
+            $originalList[$k]['text'] = $atlasUserData[$v['id']];
             $refer[$v[$this->pk]] = &$originalList[$k];//为每个数组成员建立引用关系
         }
         //遍历2

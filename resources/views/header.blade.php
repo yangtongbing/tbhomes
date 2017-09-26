@@ -35,9 +35,11 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
     <!-- jQuery 3 -->
+
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <script src="{{asset('js/WdatePicker/WdatePicker.js')}}"></script>
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
+
     <![endif]-->
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -65,11 +67,6 @@
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
                     <!-- Tasks: style can be found in dropdown.less -->
-                    <li class="dropdown tasks-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span>客服热线：400-8055-855</span>
-                        </a>
-                    </li>
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -88,10 +85,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="/web/account" class="btn btn-default btn-flat">我的账户</a>
+                                    <a href="/atlas/account" class="btn btn-default btn-flat">我的账户</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="/web/login" class="btn btn-default btn-flat">退出</a>
+                                    <a href="/atlas/login" class="btn btn-default btn-flat">退出</a>
                                 </div>
                             </li>
                         </ul>
@@ -118,9 +115,8 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">主菜单</li>
-                <li class="active mycustomer"><a href="mycustomer"><i class="fa fa-circle-o"></i>我的客户</a></li>
-                <li class="account"><a href="account"><i class="fa fa-circle-o"></i>账户信息</a></li>
-                <li class="integral"><a href="integral"><i class="fa fa-circle-o"></i>我的积分</a></li>
+                <li class="account"><a href="account"><i class="fa fa-circle-o"></i>我的账户</a></li>
+                <li class="treeMapList"><a href="treeMapList"><i class="fa fa-circle-o"></i>我的家谱</a></li>
                 </li>
             </ul>
         </section>
