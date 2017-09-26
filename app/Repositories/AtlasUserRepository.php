@@ -54,7 +54,6 @@ class AtlasUserRepository
      */
     public function update($where, $data)
     {
-        $data['u_time'] = time();
         $result = $this->mod->where($where)->update($data);
         return $result;
     }

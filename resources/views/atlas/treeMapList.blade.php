@@ -31,6 +31,7 @@
                                 <div class="col-sm-2" style="width:300px;">
                                     <button class="btn btn-primary input-sm" type="submit" style="margin: 2px 2px;">查询
                                     </button>
+                                    <a class="btn btn-primary" href="/atlas/addUser">添加家谱成员</a>
                                 </div>
                             </div><!-- /.row -->
                         </form>
@@ -60,12 +61,12 @@
                                         <td>{{$value->sex == 0 ? '男' : '女'}}</td>
                                         <td>{{$value->birthday}}</td>
                                         <td>{{$value->created_at}}</td>
-                                        <td>
-                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
-                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
-                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
+                                        <td style="cursor: pointer">
+                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a> |
+                                            <a href="/atlas/editUser?id={{$value->id}}">编辑</a> |
+                                            <a onclick="delUser({{$value->id}})">删除</a> |
+                                            <a href="/atlas/addUser?id={{$value->id}}">添加下一代</a>
                                         </td>
-                                        <td>{{$value->remark}}</td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -94,7 +95,14 @@
 
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
-
+<script>
+    function delUser(id) {
+        $.post('/atlas/delUser', {id:id}, function(){
+            alert('删除成功');
+            location.reload(true);
+        });
+    }
+</script>
 <script src="{{asset('js/bootstrap-select.min.js')}}"></script>
 <link href="{{asset('css/bootstrap-select.min.css')}}" rel="stylesheet">
 @include('footer')

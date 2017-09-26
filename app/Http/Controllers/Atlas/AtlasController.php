@@ -277,17 +277,44 @@ class AtlasController extends Controller
         }
     }
 
-    /**
-     * 添加用户
-     */
-    public function addUser(CreateUserPost $request)
+    public function addUser(Request $request)
     {
+        if (!empty($request->input('id'))) {
+            $pid = $request->input('id');
+        } else {
+            $pid = 0;
+        }
+        return view('atlas.addUser', ['user' => $this->user, 'title' => '添加成员', 'pid' => $pid]);
+    }
+
+    /**
+     * 执行添加用户
+     */
+    public function doAddUser(CreateUserPost $request)
+    {
+        //参数验证
+        $this->validate($request,
+            [
+                'name' => 'required',
+                'mobile' => [
+                    'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
+                ],
+                'sex' => 'required',
+                'birthday' => 'required',
+            ],
+            [
+                'name.required' => '姓名不能为空',
+                'mobile.regex' => '手机号格式不正确',
+                'sex.required' => '性别不能为空',
+                'birthday.required' => '出生年月不能为空',
+            ]
+        );
         $atlasUser = new AtlasUserRepository();
         $atlasReleation = new AtlasReleationRepository();
 
         //添加到用户表中
         $post = $request->input();
-        $pid = $post['pid'];
+        $pid = $post['pid'] ?: 0;
         unset($post['pid']);
         $post['admin_id'] = $this->user['id'];
         $id = $atlasUser->create($post);
@@ -298,6 +325,7 @@ class AtlasController extends Controller
             'pid' => $pid
         ];
         $atlasReleation->create($atlasReleationData);
+        return redirect('/atlas/treeMapList');
     }
 
     /**
@@ -313,12 +341,48 @@ class AtlasController extends Controller
     }
 
     /**
-     * 编辑用户
-     * @param Request $request
+     * 获取用户信息
      */
     public function editUser(Request $request)
     {
+        $atlasUser = new AtlasUserRepository();
+        $id = $request->input('id');
+        $atlasUserData = $atlasUser->getOne('*', ['id' => $id]);
+        return view('atlas.editUser', ['user'=>$this->user, 'title' => '成员编辑','lists'=>$atlasUserData]);
+    }
 
+    /**
+     * 编辑用户
+     * @param Request $request
+     */
+    public function doEditUser(Request $request)
+    {
+        $this->validate($request,
+            [
+                'id' => 'required',
+                'name' => 'required',
+                'mobile' => [
+                    'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
+                ],
+                'sex' => 'required',
+                'birthday' => 'required',
+            ],
+            [
+                'id.required' => 'id不能为空',
+                'name.required' => '姓名不能为空',
+                'mobile.regex' => '手机号格式不正确',
+                'sex.required' => '性别不能为空',
+                'birthday.required' => '出生年月不能为空',
+            ]
+        );
+        $postData = $request->input();
+        $atlasUser = new AtlasUserRepository();
+        $res = $atlasUser->update(['id' => $postData['id']], $postData);
+        if ($res) {
+            return redirect('/atlas/treeMapList');
+        } else {
+            return back()->withErrors('更新失败');
+        }
     }
 
     /**

@@ -24,20 +24,20 @@ class IndexController extends Controller
 
     private $path = './upload/';
 
-    public function __construct(CompanyRepository $companyRepository)
+    public function __construct()
     {
         $this->middleware(function ($request, $next) {
             $this->user = json_decode(session($this->session_key), true);
             return $next($request);
         });
-        $this->repository = $companyRepository;
     }
 
     //登录页面
     public function login()
     {
+        echo 'success';exit;
         Session::put($this->session_key, '');
-        return view('index.login', ['title'=>'登录']);
+        return view('index.login', ['title' => '登录']);
     }
 
     //处理登录
