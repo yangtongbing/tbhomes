@@ -51,7 +51,7 @@
                             <tbody>
                             @if (count($lists) === 0)
                                 <tr>
-                                    <td colspan="11" style="text-align: center;">没有找到订单记录~</td>
+                                    <td colspan="11" style="text-align: center;">没有找到成员记录~</td>
                                 </tr>
                             @else
                                 @foreach ($lists as $value)
