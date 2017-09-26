@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
-class IndexController extends Controller
+class AtlasController extends Controller
 {
     protected $user;
 
@@ -230,6 +230,10 @@ class IndexController extends Controller
         return view('atlas.myTreeMap', ['title' => '我的家谱', 'user' => $this->user,  'id' => $id]);
     }
 
+    /**
+     * 家谱列表
+     * @param Request $request
+     */
     public function treeMapList(Request $request)
     {
         $search = [];
@@ -275,7 +279,7 @@ class IndexController extends Controller
 
     /**
      * 添加用户
-     e*/
+     */
     public function addUser(CreateUserPost $request)
     {
         $atlasUser = new AtlasUserRepository();
@@ -296,10 +300,33 @@ class IndexController extends Controller
         $atlasReleation->create($atlasReleationData);
     }
 
+    /**
+     * 删除用户
+     * @param Request $request
+     * @return bool|null
+     */
     public function delUser(Request $request)
     {
         $id = $request->input('id');
         $atlasUser = new AtlasUserRepository();
         return $atlasUser->delete($id);
+    }
+
+    /**
+     * 编辑用户
+     * @param Request $request
+     */
+    public function editUser(Request $request)
+    {
+
+    }
+
+    /**
+     * 重置密码
+     * @param Request $request
+     */
+    public function resetPass(Request $request)
+    {
+
     }
 }

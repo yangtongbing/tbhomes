@@ -62,6 +62,8 @@
                                         <td>{{$value->created_at}}</td>
                                         <td>
                                             <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
+                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
+                                            <a href="/atlas/myTreeMap?id={{$value->id}}">查看家谱</a>
                                         </td>
                                         <td>{{$value->remark}}</td>
                                     </tr>

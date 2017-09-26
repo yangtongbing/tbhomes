@@ -32,19 +32,22 @@ Route::Group(['prefix' => 'web', 'namespace' => 'Web'], function () {
 
 ###url配置(需要登录)
 Route::Group(['prefix' => 'atlas', 'middleware' => 'atlasverify', 'namespace' => 'Atlas'], function () {
-    Route::get("/", 'IndexController@login');
-    Route::get("account", 'IndexController@account');
-    Route::post('imgCode', 'IndexController@imgCode')->name('atlas.Index.imgCode');
-    Route::post('treemap', 'IndexController@treemap')->name('atlas.Index.treemap');
-    Route::post('addUser', 'IndexController@addUser')->name('atlas.Index.addUser');
-    Route::get('myTreeMap', 'IndexController@myTreeMap')->name('atlas.Index.myTreeMap');
-    Route::get('treeMapList', 'IndexController@treeMapList')->name('atlas.Index.treeMapList');
+    Route::get("/", 'AtlasController@login');
+    Route::get("account", 'AtlasController@account');
+    Route::post('imgCode', 'AtlasController@imgCode')->name('atlas.Index.imgCode');
+    Route::post('treemap', 'AtlasController@treemap')->name('atlas.Index.treemap');
+    Route::post('addUser', 'AtlasController@addUser')->name('atlas.Index.addUser');
+    Route::post('delUser', 'AtlasController@delUser')->name('atlas.Index.delUser');
+    Route::post('editUser', 'AtlasController@editUser')->name('atlas.Index.editUser');
+    Route::post('resetPass', 'AtlasController@resetPass')->name('atlas.Index.resetPass');
+    Route::get('myTreeMap', 'AtlasController@myTreeMap')->name('atlas.Index.myTreeMap');
+    Route::get('treeMapList', 'AtlasController@treeMapList')->name('atlas.Index.treeMapList');
 });
 
 ###url配置(不需要登录)
 Route::Group(['prefix' => 'atlas', 'namespace' => 'Atlas'], function () {
     //首页
-    Route::get('login', 'IndexController@login')->name('atlas.Index.login');
-    Route::post('imgCode', 'IndexController@imgCode')->name('atlas.Index.imgCode');
-    Route::post('doLogin', 'IndexController@doLogin')->name('atlas.Index.doLogin');
+    Route::get('login', 'AtlasController@login')->name('atlas.Index.login');
+    Route::post('imgCode', 'AtlasController@imgCode')->name('atlas.Index.imgCode');
+    Route::post('doLogin', 'AtlasController@doLogin')->name('atlas.Index.doLogin');
 });
