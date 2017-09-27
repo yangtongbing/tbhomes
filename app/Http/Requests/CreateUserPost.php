@@ -25,7 +25,6 @@ class CreateUserPost extends FormRequest
     {
         return [
             'name' => 'required',
-            'birthday' => 'required',
             'sex' => 'required'
         ];
     }
@@ -34,7 +33,6 @@ class CreateUserPost extends FormRequest
     {
         return [
             'name.required' => '姓名不能为空',
-            'birthday.required' => '出生年月不能为空',
             'sex.required' => '性别不能为空'
         ];
     }

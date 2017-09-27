@@ -299,14 +299,12 @@ class AtlasController extends Controller
                 'mobile' => [
                     'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
                 ],
-                'sex' => 'required',
-//                'birthday' => 'required',
+                'sex' => 'required'
             ],
             [
                 'name.required' => '姓名不能为空',
                 'mobile.regex' => '手机号格式不正确',
-                'sex.required' => '性别不能为空',
-//                'birthday.required' => '出生年月不能为空',
+                'sex.required' => '性别不能为空'
             ]
         );
         $atlasUser = new AtlasUserRepository();
@@ -365,14 +363,12 @@ class AtlasController extends Controller
                     'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
                 ],
                 'sex' => 'required',
-//                'birthday' => 'required',
             ],
             [
                 'id.required' => 'id不能为空',
                 'name.required' => '姓名不能为空',
                 'mobile.regex' => '手机号格式不正确',
                 'sex.required' => '性别不能为空',
-//                'birthday.required' => '出生年月不能为空',
             ]
         );
         $postData = $request->input();
