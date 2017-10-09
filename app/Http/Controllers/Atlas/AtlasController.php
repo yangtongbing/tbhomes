@@ -296,14 +296,14 @@ class AtlasController extends Controller
         $this->validate($request,
             [
                 'name' => 'required',
-                'mobile' => [
-                    'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
-                ],
+//                'mobile' => [
+//                    'regex:/^(1(3|4|5|7|8)[0-9])\d{8}$/'
+//                ],
                 'sex' => 'required'
             ],
             [
                 'name.required' => '姓名不能为空',
-                'mobile.regex' => '手机号格式不正确',
+//                'mobile.regex' => '手机号格式不正确',
                 'sex.required' => '性别不能为空'
             ]
         );
