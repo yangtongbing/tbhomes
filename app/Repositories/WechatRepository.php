@@ -9,7 +9,6 @@
 namespace App\Repositories;
 
 
-use Illuminate\Support\Facades\Cache;
 use App\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
