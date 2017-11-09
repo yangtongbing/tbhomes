@@ -53,3 +53,10 @@ Route::Group(['prefix' => 'atlas', 'namespace' => 'Atlas'], function () {
     Route::post('imgCode', 'AtlasController@imgCode')->name('atlas.Index.imgCode');//图形验证码
     Route::post('doLogin', 'AtlasController@doLogin')->name('atlas.Index.doLogin');//执行登录
 });
+
+##公众号
+Route::Group(['prefix' => 'wechat', 'namespace' => 'Wechat'], function(){
+    //验证接口
+    Route::get('checkStatus', 'IndexController@checkStatus')->name('wechat.Index.checkStatus');
+
+});
