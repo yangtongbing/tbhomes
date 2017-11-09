@@ -22,6 +22,8 @@ class WechatRepository
     const token = 'MGM2OGEyYTliODJhMjYwYTUwYjUyNDlk';
     const url = 'https://api.weixin.qq.com/cgi-bin/';
 
+    private $error; //错误信息
+
     public function __construct()
     {
 
@@ -35,9 +37,22 @@ class WechatRepository
         } else {
             $data = vcurl(self::url . 'token?grant_type=client_credential&appid=' .
                 self::appID . '&secret=' . self::appsecret);
-            Log::info('wechat|res:' . json_encode($data));
-            Redis::set($key, $data['access_token'], $data['expires_in']);
-            return $data['access_token'];
+            Log::info('wechat|res:' . $data);
+
+            //解析返回的数据 出错直接返回对应的错误
+            $data = json_decode($data, true);
+            if (array_key_exists('errcode', $data)) {
+                $this->error = 'access_token获取失败';
+                return false;
+            } else {
+                Redis::set($key, $data['access_token'], $data['expires_in']);
+                return $data['access_token'];
+            }
         }
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 }

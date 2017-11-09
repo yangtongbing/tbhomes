@@ -43,6 +43,11 @@ class IndexController extends Controller
 
     public function getAccessToken(WechatRepository $wechatRepository)
     {
-        var_dump($wechatRepository->getAccessToken());exit;
+        $res = $wechatRepository->getAccessToken();
+        if (!$res) {
+            var_dump($wechatRepository->getError());
+        } else {
+            var_dump($res);
+        }
     }
 }
