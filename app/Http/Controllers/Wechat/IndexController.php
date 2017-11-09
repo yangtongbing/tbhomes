@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
 {
+    private $token = 'MGM2OGEyYTliODJhMjYwYTUwYjUyNDlk';
+
     public function __construct()
     {
 
@@ -24,6 +26,17 @@ class IndexController extends Controller
 
     public function checkStatus(Request $request)
     {
-        Log::info('wechat|data:' . json_encode($request->input()));
+        $signature = $request->input('signature');
+        $echostr = $request->input('echostr');
+        $timestamp = $request->input('timestamp');
+        $nonce = $request->input('nonce');
+        $tmp = [$this->token, $timestamp, $nonce];
+        $tmp = sort($tmp);
+        $sha1Str = sha1(implode('', $tmp));
+        if ($sha1Str == $signature) {
+            return $echostr;
+        } else {
+            return false;
+        }
     }
 }
