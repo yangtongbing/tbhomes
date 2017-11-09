@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Wechat;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\WechatRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -34,11 +35,14 @@ class IndexController extends Controller
         sort($tmp, SORT_STRING);
         $sha1Str = sha1(implode($tmp));
         if ($sha1Str == $signature) {
-            Log::info('wechat|success');
             return $echostr;
         } else {
-            Log::info('wechat|failed');
             return false;
         }
+    }
+
+    public function getAccessToken(WechatRepository $wechatRepository)
+    {
+        var_dump($wechatRepository->getAccessToken());exit;
     }
 }

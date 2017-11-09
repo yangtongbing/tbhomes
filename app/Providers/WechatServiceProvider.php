@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Repositories\Wechat;
+use App\Repositories\WechatRepository;
 use Illuminate\Support\ServiceProvider;
 
 class WechatServiceProvider extends ServiceProvider
@@ -25,6 +25,6 @@ class WechatServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->app->bind('Wechat',Wechat::class);
+        $this->app->bind('Wechat',WechatRepository::class);
     }
 }

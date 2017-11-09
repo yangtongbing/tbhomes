@@ -14,6 +14,6 @@ class Wechat extends Facade
 {
     public static function getFacadeAccessor()
     {
-        return new \App\Repositories\Wechat();
+        return new \App\Repositories\WechatRepository();
     }
 }
