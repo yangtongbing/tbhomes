@@ -34,9 +34,11 @@ class IndexController extends Controller
         sort($tmp, SORT_STRING);
         $sha1Str = sha1(implode($tmp));
         if ($sha1Str == $signature) {
-            return array(0, $sha1Str);;
+            Log::info('wechat|success');
+            return $echostr;
         } else {
-            return array(-40003, null);
+            Log::info('wechat|failed');
+            return false;
         }
     }
 }
