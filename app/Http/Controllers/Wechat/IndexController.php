@@ -31,8 +31,8 @@ class IndexController extends Controller
         $timestamp = $request->input('timestamp');
         $nonce = $request->input('nonce');
         $tmp = [$this->token, $timestamp, $nonce];
-        $tmp = sort($tmp);
-        $sha1Str = sha1(implode('', $tmp));
+        sort($tmp, SORT_STRING);
+        $sha1Str = sha1(implode($tmp));
         if ($sha1Str == $signature) {
             return $echostr;
         } else {
