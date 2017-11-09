@@ -45,7 +45,8 @@ class WechatRepository
                 $this->error = 'access_token获取失败';
                 return false;
             } else {
-                Redis::set($key, $data['access_token'], $data['expires_in']);
+                Redis::set($key, $data['access_token']);
+                Redis::expire($key, $data['expires_in']);
                 return $data['access_token'];
             }
         }
