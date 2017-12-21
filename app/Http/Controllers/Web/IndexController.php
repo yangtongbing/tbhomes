@@ -35,7 +35,6 @@ class IndexController extends Controller
     //登录页面
     public function login()
     {
-        echo 'success';exit;
         Session::put($this->session_key, '');
         return view('index.login', ['title' => '登录']);
     }

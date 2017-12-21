@@ -17,16 +17,41 @@ use LaLit\XML2Array;
 
 class WechatRepository
 {
-    const appID = 'wx97bb97b4ce15fbae';
-    const appsecret = 'e63f75bdf07dee13cddab1c3347673f0';
-    const token = 'MGM2OGEyYTliODJhMjYwYTUwYjUyNDlk';
     const url = 'https://api.weixin.qq.com/cgi-bin/';
 
+    private $appID;
+    private $appsecret;
+    private $token;
     private $error; //错误信息
+
+    private $url = [
+        'getcallbackip' => self::url . 'getcallbackip',
+    ];
 
     public function __construct()
     {
+        $this->appID = config('wechat.app_id');
+        $this->appsecret = config('wechat.app_secret');
+        $this->token = config('wechat.wechat_token');
+    }
 
+    public function getCallBackIp()
+    {
+        $res = $this->post($this->url['getcallbackip']);
+        if ($res['']) {
+
+        }
+    }
+
+    public function post($url, $data=[])
+    {
+        $accessToken = $this->getAccessToken();
+        if (!$accessToken) {
+            return false;
+        }
+        $res = vcurl($url . '?access_token=' . $accessToken, $data);
+        Log::info('wechat|res:' . $res);
+        return json_decode($res, true);
     }
 
     public function getAccessToken()
@@ -36,12 +61,12 @@ class WechatRepository
             return Redis::get($key);
         } else {
             $data = vcurl(self::url . 'token?grant_type=client_credential&appid=' .
-                self::appID . '&secret=' . self::appsecret);
+                $this->appID . '&secret=' . $this->appsecret);
             Log::info('wechat|res:' . $data);
 
             //解析返回的数据 出错直接返回对应的错误
             $data = json_decode($data, true);
-            if (array_key_exists('errcode', $data)) {
+            if ($data == null || array_key_exists('errcode', $data)) {
                 $this->error = 'access_token获取失败';
                 return false;
             } else {

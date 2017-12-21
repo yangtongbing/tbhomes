@@ -2,7 +2,7 @@
 /**
  * ClassName: PcConfigRepository
  * PC配置
- * @author  zhaojipeng<zhaojipeng@haodai.net>
+ * @author  yangtongbing<yangtongbing@haodai.net>
  * @version 1.0
  */
 

@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
 {
-    private $token = 'MGM2OGEyYTliODJhMjYwYTUwYjUyNDlk';
+    private $token;
 
     public function __construct()
     {
-
+        $this->token = config('wechat.wechat_token');
     }
 
 
