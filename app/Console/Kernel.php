@@ -26,8 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function(){
-            $record = new RecordExtRepository();
-            $record->callDetail();
+
         })->everyMinute();
     }
 

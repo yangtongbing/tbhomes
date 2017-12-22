@@ -16,9 +16,5 @@ use Illuminate\Http\Request;
 
 /*Api公共接口定义*/
 Route::Group(['namespace' => 'Api'], function () {
-    Route::post('apply', 'IndexController@index')->name('apply');
-    //外呼接口
-    Route::post('callOut', 'CallOutController@callOut')->name('callOut');
-    Route::post('createUser', 'IndexController@createUser')->name('createUser');
-    Route::post('dropUser', 'IndexController@dropUser')->name('dropUser');
+
 });
