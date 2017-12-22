@@ -1,4 +1,5 @@
 <?php
+Route::get('/', 'HomeController@index');
 ###家谱url配置(需要登录)
 Route::Group(['prefix' => 'atlas', 'middleware' => 'atlasverify', 'namespace' => 'Atlas'], function () {
     Route::get("/", 'AtlasController@login');

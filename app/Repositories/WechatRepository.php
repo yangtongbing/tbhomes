@@ -23,7 +23,7 @@ class WechatRepository
     private $appsecret;
     private $token;
     private $error; //错误信息
-
+    //配置请求url
     private $url = [
         'getcallbackip' => self::url . 'getcallbackip',
     ];
@@ -35,6 +35,7 @@ class WechatRepository
         $this->token = config('wechat.wechat_token');
     }
 
+    //获取回调ip地址
     public function getCallBackIp()
     {
         $res = $this->post($this->url['getcallbackip']);
