@@ -180,7 +180,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 	    Encore\Admin\Providers\AdminServiceProvider::class,
         App\Providers\CipherECBServiceProvider::class,
-        App\Providers\BsSdkServiceProvider::class,
         App\Providers\CallOutServiceProvider::class,
         \SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class
