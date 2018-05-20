@@ -12,6 +12,7 @@ Route::group([
 
     $router->get('/', 'HomeController@index');
     $router->resource('atlas', AtlasController::class);
+    $router->get('city', 'AtlasController@city');
 });
 
 

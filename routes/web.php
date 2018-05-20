@@ -27,7 +27,8 @@ Route::Group(['prefix' => 'atlas', 'namespace' => 'Atlas'], function () {
 ##公众号
 Route::Group(['prefix' => 'wechat', 'namespace' => 'Wechat'], function(){
     //验证接口
-    Route::get('checkStatus', 'IndexController@checkStatus')->name('wechat.Index.checkStatus');
+    Route::any('callback', 'IndexController@callback')->name('wechat.Index.callback');
     Route::get('getAccessToken', 'IndexController@getAccessToken')->name('wechat.Index.getAccessToken');
-
 });
+
+
