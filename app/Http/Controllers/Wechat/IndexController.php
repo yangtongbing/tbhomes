@@ -29,42 +29,42 @@ class IndexController extends Controller
     {
         //处理回调
         $data = $request->getContent();
-        Log::info('callback|'.$data);
-        if (!$data) {
+        Log::info('callback|'.var_export($data, true));
+        if (empty($data) === true) {
             return 'success';
         }
         //转化xml
-        $res = $this->repository->getContent($data);
-        Log::info('callres|'.json_encode($res));
-        if ($res['Event'] == 'CLICK') {
-            $extra[] = [
-                'title' => '第一次测试',
-                'description' => '测试抱着激动的心情',
-                'picurl' => config('app.url') . '/img/pretend.jpg',
-                'url' => config('app.url') . '/img/pretend.jpg',
-            ];
-            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
-        } elseif ($res['Event'] == 'CLICK') {
-            $extra['Content'] = '你好';
-            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
-        } else {
-
-        }
-        return 'success';
-
-//        //验证签名
-//        $signature = $request->input('signature');
-//        $echostr = $request->input('echostr');
-//        $timestamp = $request->input('timestamp');
-//        $nonce = $request->input('nonce');
-//        $tmp = [$this->token, $timestamp, $nonce];
-//        sort($tmp, SORT_STRING);
-//        $sha1Str = sha1(implode($tmp));
-//        if ($sha1Str == $signature) {
-//            return $echostr;
+//        $res = $this->repository->getContent($data);
+//        Log::info('callres|'.json_encode($res));
+//        if ($res['Event'] == 'CLICK') {
+//            $extra[] = [
+//                'title' => '第一次测试',
+//                'description' => '测试抱着激动的心情',
+//                'picurl' => config('app.url') . '/img/pretend.jpg',
+//                'url' => config('app.url') . '/img/pretend.jpg',
+//            ];
+//            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
+//        } elseif ($res['Event'] == 'CLICK') {
+//            $extra['Content'] = '你好';
+//            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
 //        } else {
-//            return false;
+//
 //        }
+//        return 'success';
+
+        //验证签名
+        $signature = $request->input('signature');
+        $echostr = $request->input('echostr');
+        $timestamp = $request->input('timestamp');
+        $nonce = $request->input('nonce');
+        $tmp = [$this->token, $timestamp, $nonce];
+        sort($tmp, SORT_STRING);
+        $sha1Str = sha1(implode($tmp));
+        if ($sha1Str == $signature) {
+            return $echostr;
+        } else {
+            return false;
+        }
     }
 
     public function getAccessToken(WechatRepository $wechatRepository, ZoneRepository $zoneRepository)
