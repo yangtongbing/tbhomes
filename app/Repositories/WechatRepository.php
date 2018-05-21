@@ -44,13 +44,40 @@ class WechatRepository
             'button' => [
                 [
                     'type' => 'click',
-                    'name' => '图文简介',
-                    'key' => 'asdfasdf',
+                    'name' => '介绍',
+                    'key' => 'afafaf',
                 ],
                 [
-                    'type' => 'click',
-                    'name' => '获取姓名',
-                    'key' => 'asdfasdf',
+                    'name' => '菜单',
+                    'sub_button' => [
+                        [
+                            'type' => 'view',
+                            'name' => '获取姓名',
+                            'url' => 'http://www.baidu.com',
+                        ],
+                        [
+                            'type' => 'click',
+                            'name' => '赞一下',
+                            'key' => 'dfdfdf',
+                        ]
+                    ],
+                ],
+                [
+                    'name' => '扫一扫',
+                    'sub_button' => [
+                        [
+                            "type" => "scancode_waitmsg",
+                            "name" => "扫码带提示",
+                            "key" => "rselfmenu_0_0",
+                            "sub_button" => [ ]
+                        ],
+                        [
+                            "type" => "scancode_push",
+                            "name" => "扫码推事件",
+                            "key" => "rselfmenu_0_0",
+                            "sub_button" => [ ]
+                        ]
+                    ],
                 ],
             ]
         ];

@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Wechat;
 
 use App\Http\Controllers\Controller;
+use App\Models\Zone;
 use App\Repositories\WechatRepository;
 use App\Repositories\ZoneRepository;
 use Illuminate\Http\Request;
@@ -34,24 +35,29 @@ class IndexController extends Controller
             return 'success';
         }
         //转化xml
-//        $res = $this->repository->getContent($data);
-//        Log::info('callres|'.json_encode($res));
-//        if ($res['Event'] == 'CLICK') {
-//            $extra[] = [
-//                'title' => '第一次测试',
-//                'description' => '测试抱着激动的心情',
-//                'picurl' => config('app.url') . '/img/pretend.jpg',
-//                'url' => config('app.url') . '/img/pretend.jpg',
-//            ];
-//            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
-//        } elseif ($res['Event'] == 'CLICK') {
-//            $extra['Content'] = '你好';
-//            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
-//        } else {
-//
-//        }
-//        return 'success';
+        $res = $this->repository->getContent($data);
+        Log::info('callres|'.json_encode($res));
+        if ($res['Event'] == 'CLICK') {
+            $extra[] = [
+                'title' => '第一次测试',
+                'description' => '测试抱着激动的心情',
+                'picurl' => config('app.url') . '/img/pretend.jpg',
+                'url' => config('app.url') . '/img/pretend.jpg',
+            ];
+            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
+        } elseif ($res['Event'] == 'CLICK') {
+            $extra['Content'] = '你好';
+            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
+        } else {
 
+        }
+
+        //处理回调
+        $data = $request->all();
+        Log::info('callback|'.var_export($request->all(), true));
+        if (empty($data) === true) {
+            return 'success';
+        }
         //验证签名
         $signature = $request->input('signature');
         $echostr = $request->input('echostr');
@@ -68,6 +74,16 @@ class IndexController extends Controller
     }
 
     public function getAccessToken(WechatRepository $wechatRepository, ZoneRepository $zoneRepository)
+    {
+        $res = $wechatRepository->menuCreate();
+        if (!$res) {
+            print_r($wechatRepository->getError());
+        } else {
+            print_r($res);
+        }
+    }
+
+    public function pullData(ZoneRepository $zoneRepository)
     {
         set_time_limit(0);
         $file = 'http://www.mca.gov.cn/article/sj/tjbz/a/2017/201801/201801151447.html';
@@ -110,16 +126,6 @@ class IndexController extends Controller
                 $i+=2;
                 $j+=2;
             }
-        }
-
-        exit('成功');
-//        echo "<pre>";
-//        var_dump($data);exit;
-        $res = $wechatRepository->menuCreate();
-        if (!$res) {
-            print_r($wechatRepository->getError());
-        } else {
-            print_r($res);
         }
     }
 }
