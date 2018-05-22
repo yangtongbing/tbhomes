@@ -146,21 +146,28 @@ class WechatRepository
             'FromUserName' => $data['xml']['FromUserName']['@cdata'],
             'CreateTime' => $data['xml']['CreateTime'],
             'MsgType' => $data['xml']['MsgType']['@cdata'],
-            'Event' => $data['xml']['Event']['@cdata'],
-            'EventKey' => $data['xml']['EventKey']['@cdata'],
         ];
-        //点击菜单跳转链接时的事件推送
-        if ($return['Event'] == 'VIEW') {
-            $return['MenuId'] = $data['xml']['MenuId'];
+
+        if (isset($data['xml']['Event'])) {
+            $return['Event'] = $data['xml']['Event']['@cdata'];
+            //点击菜单跳转链接时的事件推送
+            switch ($return['Event']) {
+                case 'VIEW':
+                    $return['MenuId'] = $data['xml']['MenuId'];
+                    break;
+                case 'scancode_push':
+                    $return['ScanCodeInfo'] = [
+                        'ScanType' => $data['xml']['ScanCodeInfo']['ScanType']['@cdata'],
+                        'ScanResult' => $data['xml']['ScanCodeInfo']['ScanResult']['@cdata'],
+                    ];
+                    break;
+            }
         }
 
-        //scancode_push扫码推事件的事件推送
-        if ($return['Event'] == 'scancode_push') {
-            $return['ScanCodeInfo'] = [
-                'ScanType' => $data['xml']['ScanCodeInfo']['ScanType']['@cdata'],
-                'ScanResult' => $data['xml']['ScanCodeInfo']['ScanResult']['@cdata'],
-            ];
+        if (isset($data['xml']['EventKey'])) {
+            $return['EventKey'] = $data['xml']['EventKey']['@cdata'];
         }
+
         return $return;
     }
 

@@ -37,19 +37,24 @@ class IndexController extends Controller
         //转化xml
         $res = $this->repository->getContent($data);
         Log::info('callres|'.json_encode($res));
-        if ($res['Event'] == 'CLICK') {
-            $extra[] = [
-                'title' => '第一次测试',
-                'description' => '测试抱着激动的心情',
-                'picurl' => config('app.url') . '/img/pretend.jpg',
-                'url' => config('app.url') . '/img/pretend.jpg',
-            ];
-            $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
-        } elseif ($res['Event'] == 'CLICK') {
+        if (!isset($res['Event'])) {
             $extra['Content'] = '你好';
             $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
         } else {
+            if ($res['Event'] == 'CLICK') {
+                $extra[] = [
+                    'title' => '第一次测试',
+                    'description' => '测试抱着激动的心情',
+                    'picurl' => config('app.url') . '/img/pretend.jpg',
+                    'url' => config('app.url') . '/img/pretend.jpg',
+                ];
+                $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'news', $extra);
+            } elseif ($res['Event'] == 'CLICK') {
+                $extra['Content'] = '你好';
+                $this->repository->returnMsg($res['FromUserName'], $res['ToUserName'], 'text', $extra);
+            } else {
 
+            }
         }
 
         //处理回调
@@ -75,7 +80,7 @@ class IndexController extends Controller
 
     public function getAccessToken(WechatRepository $wechatRepository, ZoneRepository $zoneRepository)
     {
-        $res = $wechatRepository->menuCreate();
+        $res = $wechatRepository->getCallBackIp();
         if (!$res) {
             print_r($wechatRepository->getError());
         } else {
