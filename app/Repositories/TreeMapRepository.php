@@ -55,7 +55,7 @@ class TreeMapRepository
                 unset($originalList[$k]);
                 continue;
             }
-            $originalList[$k]['text'] = $atlasUserData[$v['id']];
+            $originalList[$k]['text'] = isset($atlasUserData[$v['id']]) ? $atlasUserData[$v['id']] : '已被删除';
             $refer[$v[$this->pk]] = &$originalList[$k];//为每个数组成员建立引用关系
         }
         //遍历2

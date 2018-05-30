@@ -14,6 +14,7 @@
         "laravel/tinker": "~1.0",
         "mews/captcha": "^2.1",
         "overtrue/pinyin": "^3.0",
+        "php-amqplib/php-amqplib": "^2.7",
         "predis/predis": "^1.1",
         "simplesoftwareio/simple-qrcode": "^1.5"
     },
