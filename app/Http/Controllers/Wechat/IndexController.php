@@ -9,12 +9,11 @@
 namespace App\Http\Controllers\Wechat;
 
 use App\Http\Controllers\Controller;
-use App\Models\Zone;
 use App\Repositories\WechatRepository;
 use App\Repositories\ZoneRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Overtrue\Pinyin\Pinyin;
+use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class IndexController extends Controller
 {
@@ -132,5 +131,10 @@ class IndexController extends Controller
                 $j+=2;
             }
         }
+    }
+
+    public function ocrCeshi()
+    {
+
     }
 }

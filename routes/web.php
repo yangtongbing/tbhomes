@@ -29,6 +29,8 @@ Route::Group(['prefix' => 'wechat', 'namespace' => 'Wechat'], function(){
     //验证接口
     Route::any('callback', 'IndexController@callback')->name('wechat.Index.callback');
     Route::get('getAccessToken', 'IndexController@getAccessToken')->name('wechat.Index.getAccessToken');
+    Route::get('pullData', 'IndexController@pullData')->name('wechat.Index.pullData');
+    Route::get('ocrCeshi', 'IndexController@ocrCeshi')->name('wechat.Index.ocrCeshi');
 });
 
 
