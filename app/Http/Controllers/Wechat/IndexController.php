@@ -9,10 +9,15 @@
 namespace App\Http\Controllers\Wechat;
 
 use App\Http\Controllers\Controller;
+use App\Models\IntentUser;
+use App\Models\Zone;
 use App\Repositories\WechatRepository;
 use App\Repositories\ZoneRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use phpspider\core\requests;
+use phpspider\core\selector;
 use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class IndexController extends Controller
@@ -92,7 +97,8 @@ class IndexController extends Controller
         set_time_limit(0);
         $file = 'http://www.mca.gov.cn/article/sj/tjbz/a/2017/201801/201801151447.html';
         \phpQuery::newDocumentFileHTML($file);
-        $tr = pq('tr');
+        $tr = pq('container');
+        var_dump($tr);exit;
         $i = 0;
         $j = 1;
         foreach ($tr as $value) {
@@ -137,4 +143,100 @@ class IndexController extends Controller
     {
 
     }
+
+    public function excel()
+    {
+        set_time_limit(0);
+        Excel::load('./upload/15.5.23-16.1.23.xls', function ($reader) {
+            $tmp = $reader->all();
+            //取回对应城市
+            $zoneName = [];
+            foreach ($tmp as $value) {
+                $value = json_decode(json_encode($value), true);
+                if ($value['zone']) {
+                    $zoneName[] = $value['zone'];
+                }
+            }
+
+            $zone = Zone::whereIn('CN', $zoneName)->pluck('CN', 'zone_id')->toArray();
+
+            //组装数据入库
+            $cipherECB = resolve('CipherECB');
+            foreach ($tmp as $value) {
+                $value = json_decode(json_encode($value), true);
+                if ($value['zone']) {
+                    $zoneId = array_search($value['zone'], $zone);
+                } else {
+                    $zoneId = 0;
+                }
+
+                $temp = [
+                    'name' => empty($value['name']) ? '' : $value['name'],
+                    'mobile' => $cipherECB->encrypt($value['mobile']),
+                    'bank_name' => empty($value['company_name']) ? '' : $value['company_name'],
+                    'zone_id' => $zoneId,
+                    'c_time' => strtotime($value['c_time']['date']),
+                ];
+
+                $intentUserMod = new IntentUser();
+                if (!$intentUserMod->where($temp)->get()->toArray()) {
+                    $intentUserMod->insert($temp);
+                }
+            }
+        });
+    }
+
+
+    public function getRelation()
+    {
+        $url = "http://china.baixing.com/jinrongfuwu/?page=2";
+        requests::set_cookie('Hm_lvt_5a727f1b4acc5725516637e03b07d3d2', 1532687850);
+        requests::set_cookie('Hm_lpvt_5a727f1b4acc5725516637e03b07d3d2', time());
+        requests::set_cookie('kjj_log_session_id', 15330150938403939405);
+        requests::set_cookie('kjj_log_log_id', 15330150931643807553);
+        requests::set_cookie('BAIDUID', '9B0846D3A1114F3D1B8856A8CB11EE43:FG=1');
+        requests::set_cookie('HMACCOUNT', '9B57A23D5CEF22AE');
+        requests::set_cookie('kjj_log_session_depth', rand(11,99));
+        requests::set_header("Referer", "http://beijing.baixing.com");
+        $html = requests::get($url);
+
+        // 选择器规则
+        $selector = "//ul[contains(@class,'list-ad-items')]//li/div";
+        // 提取结果
+        $result = selector::select($html, $selector);
+
+        $temp = [];
+        if ($result) {
+            $html = new \simple_html_dom();
+            foreach ($result as $value) {
+                $html->load($value);
+                $tmp = [
+                    'mobile' => '',
+                    'company' => '',
+                    'zone' => '',
+                ];
+                foreach ($html->find('.media-body-title span button') as $value) {
+                    $tmp['mobile'] = $value->attr['data-contact'];
+                }
+
+                if ($html->find('.ad-item-detail a')) {
+                    $tmp['company'] = $html->find('.ad-item-detail a')[0]->plaintext;
+                }
+
+                $zone = $html->find('.ad-item-detail')[0]->plaintext;
+                $zone = explode('-', $zone);
+                $tmp['zone'] = trim($zone[0]);
+                $temp[] = $tmp;
+            }
+        }
+
+        if ($temp) {
+            var_dump($temp);
+        } else {
+            Log::info('getRelationError');
+        }
+    }
+
 }
+
+

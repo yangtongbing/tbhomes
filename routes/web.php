@@ -31,6 +31,8 @@ Route::Group(['prefix' => 'wechat', 'namespace' => 'Wechat'], function(){
     Route::get('getAccessToken', 'IndexController@getAccessToken')->name('wechat.Index.getAccessToken');
     Route::get('pullData', 'IndexController@pullData')->name('wechat.Index.pullData');
     Route::get('ocrCeshi', 'IndexController@ocrCeshi')->name('wechat.Index.ocrCeshi');
+    Route::get('excel', 'IndexController@excel')->name('wechat.Index.excel');
+    Route::get('getRelation', 'IndexController@getRelation')->name('wechat.Index.getRelation');
 });
 
 
